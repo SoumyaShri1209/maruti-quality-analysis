@@ -19,9 +19,9 @@ const LoginPage = () => {
   const navigate = useNavigate();
 
   // ✅ Clear any leftover inspection data when login page is shown
-  useEffect(() => {
-    clearInspection();
-  }, []);
+useEffect(() => {
+  clearInspection();
+}, [clearInspection]);
 
   // Redirect if already logged in
   if (user) {

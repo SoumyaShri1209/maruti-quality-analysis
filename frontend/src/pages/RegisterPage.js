@@ -22,7 +22,7 @@ const RegisterPage = () => {
   // ✅ Clear any leftover inspection data when register page is shown
   useEffect(() => {
     clearInspection();
-  }, []);
+  }, [clearInspection]);
 
   // Redirect if already logged in
   if (user) {

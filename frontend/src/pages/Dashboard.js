@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import AuthContext from '../context/AuthContext';
 
 const Dashboard = () => {
-  const { user, logout } = useContext(AuthContext);
+  const { user } = useContext(AuthContext);
 
   return (
     <div className="min-h-screen bg-gray-50 py-12 px-4">
