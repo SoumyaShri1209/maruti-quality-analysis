@@ -43,19 +43,17 @@ const registerUser = async (req, res) => {
 
     const verifyUrl = `${getClientBaseUrl()}/verify/${verificationToken}`;
 
-    setImmediate(() => {
-      sendEmail({
-        to: user.email,
-        subject: 'Verify your email – QualiCheck',
-        html: `
-          <h2>Welcome to QualiCheck!</h2>
-          <p>Please click the link below to verify your email:</p>
-          <a href="${verifyUrl}">${verifyUrl}</a>
-          <p>This link expires in 24 hours.</p>
-        `,
-      }).catch((emailError) => {
-        console.error('Verification email failed:', emailError.message);
-      });
+    sendEmail({
+      to: user.email,
+      subject: 'Verify your email – QualiCheck',
+      html: `
+        <h2>Welcome to QualiCheck!</h2>
+        <p>Please click the link below to verify your email:</p>
+        <a href="${verifyUrl}">${verifyUrl}</a>
+        <p>This link expires in 24 hours.</p>
+      `,
+    }).catch((emailError) => {
+      console.error('Verification email failed for', user.email, ':', emailError.message);
     });
 
     res.status(201).json({
@@ -196,14 +194,12 @@ const resendVerification = async (req, res) => {
 
     const verifyUrl = `${getClientBaseUrl()}/verify/${user.verificationToken}`;
 
-    setImmediate(() => {
-      sendEmail({
-        to: user.email,
-        subject: 'Verify your email – QualiCheck',
-        html: `<h2>New verification link</h2><a href="${verifyUrl}">Click here to verify</a>`,
-      }).catch((emailError) => {
-        console.error('Verification email resend failed:', emailError.message);
-      });
+    sendEmail({
+      to: user.email,
+      subject: 'Verify your email – QualiCheck',
+      html: `<h2>New verification link</h2><a href="${verifyUrl}">Click here to verify</a>`,
+    }).catch((emailError) => {
+      console.error('Verification email resend failed for', user.email, ':', emailError.message);
     });
 
     res.json({ message: 'Verification email resent. Please check your inbox.' });
