@@ -10,3 +10,11 @@
 [2026-07-27T10:02:02.585Z] 📧 [SENDMAIL] Sending email to: completeflow_1236195152@gmail.com
 [2026-07-27T10:02:06.950Z] ✅ [SENDMAIL] Email sent successfully. MessageId: <a56516c1-38f2-8b5a-9f9e-354c80501ef7@gmail.com>
 [2026-07-27T10:02:06.951Z] ✅ [SIGNUP] Verification email sent successfully to: completeflow_1236195152@gmail.com
+[2026-07-27T10:15:02.821Z] 📧 [SIGNUP] Attempting to send verification email to: realtest_1330672048@gmail.com
+[2026-07-27T10:15:02.973Z] 📧 [SENDMAIL] Sending email to: realtest_1330672048@gmail.com
+[2026-07-27T10:15:09.526Z] ✅ [SENDMAIL] Email sent successfully. MessageId: <399b81b5-da4c-aa3e-1184-36a8769608cc@gmail.com>
+[2026-07-27T10:15:09.529Z] ✅ [SIGNUP] Verification email sent successfully to: realtest_1330672048@gmail.com
+[2026-07-27T10:20:31.407Z] 📧 [RESEND] Attempting to resend verification email to: soumyashri1209@gmail.com
+[2026-07-27T10:20:31.428Z] 📧 [SENDMAIL] Sending email to: soumyashri1209@gmail.com
+[2026-07-27T10:20:36.213Z] ✅ [SENDMAIL] Email sent successfully. MessageId: <05d42a66-23d7-f01a-d4ec-da9556614a80@gmail.com>
+[2026-07-27T10:20:36.216Z] ✅ [RESEND] Verification email resent successfully to: soumyashri1209@gmail.com

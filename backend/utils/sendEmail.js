@@ -1,38 +1,24 @@
 const nodemailer = require('nodemailer');
 
 const transporter = nodemailer.createTransport({
-  host: 'smtp.gmail.com',
-  port: 587,
+  host: process.env.SMTP_HOST || 'smtp-relay.brevo.com',
+  port: parseInt(process.env.SMTP_PORT || '587', 10),
   secure: false,
   auth: {
-    user: process.env.EMAIL_USER,
-    pass: (process.env.EMAIL_PASS || '').replace(/\s+/g, ''),
+    user: process.env.SMTP_LOGIN,
+    pass: process.env.SMTP_PASSWORD,
   },
 });
 
 const sendEmail = async ({ to, subject, html }) => {
-  try {
-    const msg = `📧 [SENDMAIL] Sending email to: ${to}`;
-    if (global.logToFile) global.logToFile(msg);
-    console.log(msg);
-    
-    const result = await transporter.sendMail({
-      from: process.env.EMAIL_USER,
-      to,
-      subject,
-      html,
-    });
-    
-    const successMsg = `✅ [SENDMAIL] Email sent successfully. MessageId: ${result.messageId}`;
-    if (global.logToFile) global.logToFile(successMsg);
-    console.log(successMsg);
-    return result;
-  } catch (error) {
-    const errorMsg = `❌ [SENDMAIL] Email send failed - To: ${to}, Error: ${error.message}, Code: ${error.code}`;
-    if (global.logToFile) global.logToFile(errorMsg);
-    console.error(errorMsg);
-    throw error;
-  }
+  const result = await transporter.sendMail({
+    from: process.env.EMAIL_FROM || process.env.SMTP_LOGIN,
+    to,
+    subject,
+    html,
+  });
+  console.log(`✅ Email sent to ${to}, messageId: ${result.messageId}`);
+  return result;
 };
 
 module.exports = sendEmail;
