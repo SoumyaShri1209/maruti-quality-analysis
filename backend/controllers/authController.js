@@ -7,6 +7,12 @@ const { OAuth2Client } = require('google-auth-library');
 
 const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
+const normalizeEmail = (email) => (email || '').trim().toLowerCase();
+
+const getClientBaseUrl = () => {
+  return (process.env.CLIENT_URL || 'http://localhost:3000').trim().replace(/\/$/, '');
+};
+
 const generateToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: '30d' });
 };
@@ -16,8 +22,9 @@ const generateToken = (id) => {
 const registerUser = async (req, res) => {
   try {
     const { name, email, password } = req.body;
+    const normalizedEmail = normalizeEmail(email);
 
-    const userExists = await User.findOne({ email });
+    const userExists = await User.findOne({ email: normalizedEmail });
     if (userExists) {
       return res.status(400).json({ message: 'User already exists' });
     }
@@ -27,25 +34,29 @@ const registerUser = async (req, res) => {
 
     const user = await User.create({
       name,
-      email,
+      email: normalizedEmail,
       password,
       isVerified: false,
       verificationToken,
       verificationTokenExpires,
     });
 
-    const verifyUrl = `${process.env.CLIENT_URL}/verify/${verificationToken}`;
+    const verifyUrl = `${getClientBaseUrl()}/verify/${verificationToken}`;
 
-    await sendEmail({
-      to: user.email,
-      subject: 'Verify your email – QualiCheck',
-      html: `
-        <h2>Welcome to QualiCheck!</h2>
-        <p>Please click the link below to verify your email:</p>
-        <a href="${verifyUrl}">${verifyUrl}</a>
-        <p>This link expires in 24 hours.</p>
-      `,
-    });
+    try {
+      await sendEmail({
+        to: user.email,
+        subject: 'Verify your email – QualiCheck',
+        html: `
+          <h2>Welcome to QualiCheck!</h2>
+          <p>Please click the link below to verify your email:</p>
+          <a href="${verifyUrl}">${verifyUrl}</a>
+          <p>This link expires in 24 hours.</p>
+        `,
+      });
+    } catch (emailError) {
+      console.error('Verification email failed:', emailError.message);
+    }
 
     res.status(201).json({
       message: 'Registration successful! Please check your email to verify your account.',
@@ -84,8 +95,9 @@ const verifyEmail = async (req, res) => {
 const loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
+    const normalizedEmail = normalizeEmail(email);
 
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ email: normalizedEmail });
     if (!user) {
       return res.status(401).json({ message: 'Invalid email or password' });
     }
@@ -182,7 +194,7 @@ const resendVerification = async (req, res) => {
     user.verificationTokenExpires = Date.now() + 24 * 60 * 60 * 1000;
     await user.save();
 
-    const verifyUrl = `${process.env.CLIENT_URL}/verify/${user.verificationToken}`;
+    const verifyUrl = `${getClientBaseUrl()}/verify/${user.verificationToken}`;
 
     await sendEmail({
       to: user.email,

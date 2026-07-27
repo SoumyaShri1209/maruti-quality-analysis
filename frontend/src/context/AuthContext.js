@@ -9,9 +9,13 @@ export const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(localStorage.getItem('token'));
   const [loading, setLoading] = useState(true);
 
-  if (token) {
-    axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-  }
+  useEffect(() => {
+    if (token) {
+      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+    } else {
+      delete axios.defaults.headers.common['Authorization'];
+    }
+  }, [token]);
 
   useEffect(() => {
     const loadUser = async () => {
@@ -38,7 +42,10 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (formData) => {
     const res = await axios.post(`${API}/api/auth/login`, formData);
-    const newToken = res.data.token;
+    const newToken = res.data?.token;
+    if (!newToken) {
+      throw new Error('No authentication token received');
+    }
     localStorage.setItem('token', newToken);
     setToken(newToken);
     axios.defaults.headers.common['Authorization'] = `Bearer ${newToken}`;
@@ -48,7 +55,10 @@ export const AuthProvider = ({ children }) => {
 
   const googleLogin = async (credential) => {
     const res = await axios.post(`${API}/api/auth/google`, { credential });
-    const newToken = res.data.token;
+    const newToken = res.data?.token;
+    if (!newToken) {
+      throw new Error('No authentication token received');
+    }
     localStorage.setItem('token', newToken);
     setToken(newToken);
     axios.defaults.headers.common['Authorization'] = `Bearer ${newToken}`;
