@@ -43,6 +43,12 @@ const registerUser = async (req, res) => {
 
     const verifyUrl = `${getClientBaseUrl()}/verify/${verificationToken}`;
 
+    // Log email attempt
+    const attemptMsg = `📧 [SIGNUP] Attempting to send verification email to: ${user.email}`;
+    if (global.logToFile) global.logToFile(attemptMsg);
+    console.log(attemptMsg);
+    
+    // Send email asynchronously
     sendEmail({
       to: user.email,
       subject: 'Verify your email – QualiCheck',
@@ -52,8 +58,14 @@ const registerUser = async (req, res) => {
         <a href="${verifyUrl}">${verifyUrl}</a>
         <p>This link expires in 24 hours.</p>
       `,
+    }).then(() => {
+      const successMsg = `✅ [SIGNUP] Verification email sent successfully to: ${user.email}`;
+      if (global.logToFile) global.logToFile(successMsg);
+      console.log(successMsg);
     }).catch((emailError) => {
-      console.error('Verification email failed for', user.email, ':', emailError.message);
+      const failMsg = `❌ [SIGNUP] Verification email failed for ${user.email} - Error: ${emailError.message}`;
+      if (global.logToFile) global.logToFile(failMsg);
+      console.error(failMsg);
     });
 
     res.status(201).json({
@@ -194,12 +206,22 @@ const resendVerification = async (req, res) => {
 
     const verifyUrl = `${getClientBaseUrl()}/verify/${user.verificationToken}`;
 
+    const attemptMsg = `📧 [RESEND] Attempting to resend verification email to: ${user.email}`;
+    if (global.logToFile) global.logToFile(attemptMsg);
+    console.log(attemptMsg);
+    
     sendEmail({
       to: user.email,
       subject: 'Verify your email – QualiCheck',
       html: `<h2>New verification link</h2><a href="${verifyUrl}">Click here to verify</a>`,
+    }).then(() => {
+      const successMsg = `✅ [RESEND] Verification email resent successfully to: ${user.email}`;
+      if (global.logToFile) global.logToFile(successMsg);
+      console.log(successMsg);
     }).catch((emailError) => {
-      console.error('Verification email resend failed for', user.email, ':', emailError.message);
+      const failMsg = `❌ [RESEND] Verification email resend failed for ${user.email} - Error: ${emailError.message}`;
+      if (global.logToFile) global.logToFile(failMsg);
+      console.error(failMsg);
     });
 
     res.json({ message: 'Verification email resent. Please check your inbox.' });

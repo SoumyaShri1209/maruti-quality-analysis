@@ -2,9 +2,26 @@
 const express = require('express');
 const dotenv = require('dotenv');
 const cors = require('cors');
+const path = require('path');
+const fs = require('fs');
 const connectDB = require('./config/db');
 
-dotenv.config();
+const envPath = path.join(__dirname, '.env');
+console.log('Loading .env from:', envPath);
+const result = dotenv.config({ path: envPath });
+console.log('Dotenv result:', result.error ? result.error.message : 'Success');
+console.log('MONGO_URI loaded:', process.env.MONGO_URI ? 'Yes' : 'No');
+
+// Setup file logging
+const logFile = path.join(__dirname, 'email-logs.txt');
+const logToFile = (msg) => {
+  const timestamp = new Date().toISOString();
+  const logMsg = `[${timestamp}] ${msg}\n`;
+  console.log(msg);
+  fs.appendFileSync(logFile, logMsg, 'utf8');
+};
+
+global.logToFile = logToFile;
 
 const app = express();
 

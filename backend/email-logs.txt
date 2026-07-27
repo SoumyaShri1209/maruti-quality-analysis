@@ -1,0 +1,12 @@
+[2026-07-27T10:00:03.894Z] 📧 [SIGNUP] Attempting to send verification email to: filelogtest_866006352@gmail.com
+[2026-07-27T10:00:03.908Z] 📧 [SENDMAIL] Sending email to: filelogtest_866006352@gmail.com
+[2026-07-27T10:00:08.300Z] ✅ [SENDMAIL] Email sent successfully. MessageId: <78ee994f-9bb5-475b-402e-30c586b22f6d@gmail.com>
+[2026-07-27T10:00:08.308Z] ✅ [SIGNUP] Verification email sent successfully to: filelogtest_866006352@gmail.com
+[2026-07-27T10:00:45.572Z] 📧 [SIGNUP] Attempting to send verification email to: completetest_635199244@gmail.com
+[2026-07-27T10:00:45.576Z] 📧 [SENDMAIL] Sending email to: completetest_635199244@gmail.com
+[2026-07-27T10:00:50.196Z] ✅ [SENDMAIL] Email sent successfully. MessageId: <aa570c03-e59a-53f1-6f51-db9b45930c71@gmail.com>
+[2026-07-27T10:00:50.198Z] ✅ [SIGNUP] Verification email sent successfully to: completetest_635199244@gmail.com
+[2026-07-27T10:02:02.575Z] 📧 [SIGNUP] Attempting to send verification email to: completeflow_1236195152@gmail.com
+[2026-07-27T10:02:02.585Z] 📧 [SENDMAIL] Sending email to: completeflow_1236195152@gmail.com
+[2026-07-27T10:02:06.950Z] ✅ [SENDMAIL] Email sent successfully. MessageId: <a56516c1-38f2-8b5a-9f9e-354c80501ef7@gmail.com>
+[2026-07-27T10:02:06.951Z] ✅ [SIGNUP] Verification email sent successfully to: completeflow_1236195152@gmail.com
